@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mystic Tarot — Compliments & Jests</title>
+
+  <!-- Google Fonts: Cinzel Decorative, Cinzel (Tarot Titles), and Cormorant Garamond / Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700;800&family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       Design Tokens & CSS Variables
+       ========================================================================== */
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 18%, #100b20 0%, #080512 45%, #030208 100%);
+      --bg-stars: rgba(255, 255, 255, 0.03);
+      --card-bg: linear-gradient(145deg, #1d1833 0%, #120e24 100%);
+      --card-back-bg: radial-gradient(circle at 50% 50%, #1c1538 0%, #0d091e 75%, #06040f 100%);
+      --card-border-outer: #d4af37;
+      --card-border-inner: #aa8624;
+      --card-inner-bg: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.08) 0%, rgba(20, 16, 38, 0.7) 100%);
+      --gold-primary: #f5d77f;
+      --gold-deep: #c59b27;
+      --gold-glow: rgba(212, 175, 55, 0.35);
+      --purple-accent: #a855f7;
+      --purple-glow: rgba(168, 85, 247, 0.4);
+      --text-main: #fbf8ef;
+      --text-muted: #b8b1cb;
+      --text-gold: #f4d068;
+      --deck-edge: #090712;
+      --deck-border: #8b6b22;
+      --modal-bg: rgba(13, 10, 26, 0.92);
+      --shadow-deck: 0 30px 70px -10px rgba(0, 0, 0, 0.92), 0 14px 30px rgba(0, 0, 0, 0.8);
+      --btn-grad-compliment: linear-gradient(135deg, #f5d77f 0%, #d4af37 50%, #9a781b 100%);
+      --btn-grad-joke: linear-gradient(135deg, #c084fc 0%, #9333ea 50%, #6b21a8 100%);
+    }
+
+    [data-theme="light"] {
+      --bg-gradient: radial-gradient(circle at 50% 18%, #f8f4ec 0%, #ede3d1 50%, #dcd0bc 100%);
+      --bg-stars: rgba(0, 0, 0, 0.04);
+      --card-bg: linear-gradient(145deg, #ffffff 0%, #faf6ee 100%);
+      --card-back-bg: radial-gradient(circle at 50% 50%, #2a2040 0%, #161026 80%, #0a0714 100%);
+      --card-border-outer: #b38927;
+      --card-border-inner: #926f1c;
+      --card-inner-bg: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(255, 255, 255, 0.8) 100%);
+      --gold-primary: #855e08;
+      --gold-deep: #b38927;
+      --gold-glow: rgba(179, 137, 39, 0.25);
+      --purple-accent: #7e22ce;
+      --purple-glow: rgba(126, 34, 206, 0.25);
+      --text-main: #241d13;
+      --text-muted: #6b6357;
+      --text-gold: #996e10;
+      --deck-edge: #ded6c5;
+      --deck-border: #a0823c;
+      --modal-bg: rgba(250, 246, 238, 0.96);
+      --shadow-deck: 0 24px 50px -8px rgba(90, 60, 10, 0.28), 0 12px 25px rgba(0, 0, 0, 0.12);
+      --btn-grad-compliment: linear-gradient(135deg, #dfb44a 0%, #b88a20 100%);
+      --btn-grad-joke: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);
+    }
+
+    /* ==========================================================================
+       Reset & Atmospheric Background
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+      padding: 1.5rem 1rem;
+      transition: background 0.6s ease, color 0.4s ease;
+    }
+
+    /* Canvas for Sparkles */
+    #sparkle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* ==========================================================================
+       Celestial Sacred Geometry Background Elements
+       ========================================================================== */
+    .celestial-backdrop {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(920px, 95vw);
+      height: min(920px, 95vw);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.38;
+      transition: opacity 0.5s ease;
+    }
+
+    [data-theme="light"] .celestial-backdrop {
+      opacity: 0.22;
+    }
+
+    [data-theme="light"] {
+      --bg-gradient: radial-gradient(circle at 50% 20%, #fdfbf7 0%, #f3eee3 55%, #e6ddce 100%);
+      --bg-stars: rgba(0, 0, 0, 0.04);
+      --card-bg: linear-gradient(145deg, #ffffff 0%, #faf6ee 100%);
+      --card-border-outer: #b38927;
+      --card-border-inner: #926f1c;
+      --card-inner-bg: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(255, 255, 255, 0.8) 100%);
+      --gold-primary: #855e08;
+      --gold-deep: #b38927;
+      --gold-glow: rgba(179, 137, 39, 0.25);
+      --purple-accent: #7e22ce;
+      --purple-glow: rgba(126, 34, 206, 0.25);
+      --text-main: #241d13;
+      --text-muted: #6b6357;
+      --text-gold: #996e10;
+      --deck-edge: #ded6c5;
+      --deck-border: #c4a968;
+      --modal-bg: rgba(250, 246, 238, 0.94);
+      --shadow-deck: 0 20px 45px -8px rgba(133, 94, 8, 0.2), 0 10px 20px rgba(0, 0, 0, 0.08);
+      --btn-grad-compliment: linear-gradient(135deg, #dfb44a 0%, #b88a20 100%);
+      --btn-grad-joke: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);
+    }
+
+    /* ==========================================================================
+       Reset & Atmospheric Background
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+      padding: 1.5rem 1rem;
+      transition: background 0.5s ease, color 0.4s ease;
+    }
+
+    /* Canvas for Sparkles */
+    #sparkle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* ==========================================================================
+       Celestial Sacred Geometry Background Elements
+       ========================================================================== */
+    .celestial-backdrop {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(900px, 95vw);
+      height: min(900px, 95vw);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      transition: opacity 0.5s ease;
+    }
+
+    [data-theme="light"] .celestial-backdrop {
+      opacity: 0.18;
+    }
+
+    .astrolabe-wheel {
+      width: 100%;
+      height: 100%;
+      animation: slowRotate 140s linear infinite;
+      transform-origin: center center;
+    }
+
+    .astrolabe-inner {
+      animation: slowCounterRotate 90s linear infinite;
+      transform-origin: center center;
+    }
+
+    @keyframes slowRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes slowCounterRotate {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    /* Constellation Ambient Stars */
+    .ambient-star {
+      position: fixed;
+      border-radius: 50%;
+      background: #ffffff;
+      pointer-events: none;
+      z-index: 0;
+      animation: starTwinkle ease-in-out infinite alternate;
+    }
+
+    @keyframes starTwinkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 0.85; transform: scale(1.3); }
+    }
+
+    /* ==========================================================================
+       Top Navigation / Aura Controls
+       ========================================================================== */
+    .top-controls {
+      position: fixed;
+      top: 1rem;
+      right: 1.25rem;
+      display: flex;
+      gap: 0.6rem;
+      z-index: 40;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border-outer);
+      color: var(--text-gold);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      transition: all 0.25s ease;
+    }
+
+    .icon-btn.muted {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px) scale(1.06);
+      border-color: var(--gold-primary);
+      box-shadow: 0 6px 18px var(--gold-glow);
+      color: var(--text-main);
+    }
+
+    .icon-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       TAROT DECK & CARD STRUCTURE (3D Stack + Deal Animation)
+       Aspect Ratio ~ 70mm x 120mm (Tarot Standard: ~1:1.71)
+       ========================================================================== */
+    .tarot-stage {
+      position: relative;
+      perspective: 1600px;
+      z-index: 10;
+      margin: 1.5rem auto 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Stacked deck underneath layers representing face-down deck */
+    .deck-stack {
+      position: relative;
+      width: min(360px, 86vw);
+      height: min(610px, 148vw);
+      transform-style: preserve-3d;
+      transition: transform 0.2s ease;
+    }
+
+    .deck-stack.deck-draw-recoil {
+      animation: deckRecoil 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    @keyframes deckRecoil {
+      0% { transform: translateY(0) scale(1); }
+      20% { transform: translateY(3px) scale(0.995); }
+      60% { transform: translateY(-1px) scale(1.002); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .deck-layer {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      border: 1.5px solid var(--deck-border);
+      pointer-events: none;
+      background: var(--card-back-bg);
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+    }
+
+    .deck-layer-4 {
+      transform: translate3d(12px, 16px, -35px) rotate(3.6deg);
+      box-shadow: var(--shadow-deck);
+      opacity: 0.55;
+      border-color: rgba(139, 107, 34, 0.5);
+    }
+
+    .deck-layer-3 {
+      transform: translate3d(8px, 12px, -24px) rotate(2.4deg);
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.75);
+      opacity: 0.75;
+    }
+
+    .deck-layer-2 {
+      transform: translate3d(-7px, 7px, -14px) rotate(-1.9deg);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+      opacity: 0.88;
+    }
+
+    .deck-layer-1 {
+      transform: translate3d(3px, 3.5px, -6px) rotate(0.8deg);
+      opacity: 0.98;
+    }
+
+    /* Top deck rim layer right underneath the active drawn card */
+    .deck-layer-rim {
+      transform: translate3d(0, 0, -1px);
+      border-color: var(--card-border-outer);
+      background: var(--card-back-bg);
+      opacity: 1;
+    }
+
+    /* Detailed Back Pattern for Deck Layers */
+    .deck-back-art {
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .deck-back-inner {
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(212, 175, 55, 0.45);
+    }
+    .deck-back-inner svg {
+      width: 65%;
+      height: 65%;
+      opacity: 0.65;
+    }
+
+    /* The Flip Wrapper that performs the authentic Reader's Flip */
+    .tarot-flipper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transform: rotateY(0deg);
+      transition: box-shadow 0.3s ease;
+    }
+
+    /* Two-sided Card Faces */
+    .card-face {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Card Face Front: The revealed oracle */
+    .card-face-front {
+      background: var(--card-bg);
+      padding: 14px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6), 0 0 25px var(--gold-glow);
+      transform: rotateY(0deg);
+      z-index: 2;
+    }
+
+    /* Card Face Back: What a tarot deck looks like face-down */
+    .card-face-back {
+      background: var(--card-back-bg);
+      border: 2px solid var(--card-border-outer);
+      padding: 12px;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-back-ornament {
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--card-border-inner);
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, rgba(10, 7, 22, 0.8) 85%);
+      position: relative;
+      color: var(--gold-primary);
+    }
+
+    .back-mandala {
+      width: 82%;
+      height: 82%;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+    }
+
+    /* Authentic Tarot Reader Flip Animation:
+       Picks up card from behind (face-down/back shown), lifts toward reader, rotates over 180°, and settles face-up. */
+    .tarot-flipper.dealing {
+      animation: tarotReaderFlip 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes tarotReaderFlip {
+      0% {
+        /* Starts face-down on the deck */
+        transform: translate3d(0, 0, -5px) rotateY(180deg) scale(0.98);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      }
+      25% {
+        /* Lifts up toward reader's gaze */
+        transform: translate3d(-30px, -70px, 90px) rotate(-6deg) rotateY(135deg) scale(1.04);
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 35px var(--gold-glow);
+      }
+      60% {
+        /* Flips past 90 degrees edge-on to reveal face */
+        transform: translate3d(15px, -30px, 50px) rotate(3deg) rotateY(40deg) scale(1.02);
+      }
+      85% {
+        /* Slightly overshoots rotation before settling */
+        transform: translate3d(-3px, 4px, 15px) rotate(-1deg) rotateY(-5deg) scale(1);
+      }
+      100% {
+        /* Settles flat face-up */
+        transform: translate3d(0, 0, 0) rotate(0deg) rotateY(0deg) scale(1);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6), 0 0 25px var(--gold-glow);
+      }
+    }
+
+    /* Dual Golden Border & Geometry */
+    .tarot-outer-border {
+      width: 100%;
+      height: 100%;
+      border: 2px solid var(--card-border-outer);
+      border-radius: 14px;
+      padding: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tarot-inner-border {
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--card-border-inner);
+      border-radius: 10px;
+      padding: 16px 14px 14px;
+      background: var(--card-inner-bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Mystic Corner Glyphs */
+    .corner-glyph {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      color: var(--card-border-outer);
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .top-left { top: 4px; left: 4px; }
+    .top-right { top: 4px; right: 4px; transform: rotate(90deg); }
+    .bottom-right { bottom: 4px; right: 4px; transform: rotate(180deg); }
+    .bottom-left { bottom: 4px; left: 4px; transform: rotate(270deg); }
+
+    /* ==========================================================================
+       Tarot Card Content Layout
+       ========================================================================== */
+    .tarot-header {
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      z-index: 2;
+    }
+
+    .tarot-roman {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.3em;
+      color: var(--text-gold);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .tarot-subheader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .tarot-line {
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(90deg, transparent, var(--card-border-inner), transparent);
+    }
+
+    .tarot-type-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* Central Mystic Window */
+    .oracle-window {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 0.5rem;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .oracle-halo {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+      pointer-events: none;
+      animation: pulseHalo 5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseHalo {
+      0% { opacity: 0.35; transform: scale(0.9); }
+      100% { opacity: 0.75; transform: scale(1.15); }
+    }
+
+    .oracle-text-container {
+      position: relative;
+      z-index: 3;
+      max-width: 96%;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .oracle-title {
+      font-family: 'Cinzel Decorative', 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gold-primary);
+      text-shadow: 0 0 14px var(--gold-glow);
+      line-height: 1.35;
+    }
+
+    .oracle-message {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.45;
+      font-style: italic;
+      color: var(--text-main);
+      transition: opacity 0.25s ease;
+    }
+
+    /* Suspense Loading & Joke Punchline */
+    .punchline-loading {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--purple-accent);
+      margin-top: 6px;
+    }
+
+    .loading-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--purple-accent);
+      border-radius: 50%;
+      animation: dotPulse 1.2s infinite ease-in-out both;
+    }
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0.4); opacity: 0.3; }
+      40% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .joke-punchline {
+      margin-top: 0.4rem;
+      padding: 0.65rem 0.9rem;
+      border-radius: 8px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px dashed var(--purple-accent);
+      color: var(--gold-primary);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.4;
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+      transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .joke-punchline.revealed {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Card Utilities (Copy, Favorite) */
+    .tarot-toolbar {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 0.6rem;
+      z-index: 4;
+    }
+
+    .card-tool-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border-inner);
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .card-tool-btn:hover {
+      color: var(--text-gold);
+      border-color: var(--gold-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px var(--gold-glow);
+    }
+
+    .card-tool-btn.liked {
+      color: #ff4757;
+      border-color: #ff4757;
+      background: rgba(255, 71, 87, 0.15);
+    }
+
+    /* ==========================================================================
+       Dual Tarot Action Buttons (Compliment vs. Joke)
+       ========================================================================== */
+    .tarot-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+      width: 100%;
+      z-index: 4;
+    }
+
+    .mystic-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.75rem 0.5rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .mystic-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .mystic-btn:hover::before {
+      opacity: 1;
+    }
+
+    .mystic-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px var(--gold-glow);
+    }
+
+    .mystic-btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-compliment {
+      background: var(--btn-grad-compliment);
+      color: #17112c;
+      border-color: var(--gold-primary);
+    }
+
+    .btn-joke {
+      background: var(--btn-grad-joke);
+      color: #ffffff;
+      border-color: var(--purple-accent);
+    }
+
+    .btn-joke:hover {
+      box-shadow: 0 6px 18px var(--purple-glow);
+    }
+
+    /* Footer Moon Phases Emblem */
+    .tarot-footer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.75rem;
+      color: var(--card-border-outer);
+      opacity: 0.75;
+      padding-top: 6px;
+      z-index: 2;
+    }
+
+    /* ==========================================================================
+       Modals: Favorites & Custom Card Inscription
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: var(--modal-bg);
+      border: 2px solid var(--card-border-outer);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px var(--gold-glow);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.92) translateY(12px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-backdrop.active .modal-box {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border-inner);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.12em;
+      color: var(--text-gold);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.3rem;
+      padding: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      color: var(--text-main);
+    }
+
+    .fav-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding-right: 4px;
+    }
+
+    .fav-item {
+      padding: 0.85rem;
+      border-radius: 10px;
+      border: 1px solid var(--card-border-inner);
+      background: rgba(255, 255, 255, 0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .fav-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.35;
+      color: var(--text-main);
+    }
+
+    .fav-del-btn {
+      background: transparent;
+      border: none;
+      color: #ff5252;
+      cursor: pointer;
+      padding: 4px;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    .fav-del-btn:hover {
+      opacity: 1;
+    }
+
+    /* Custom Inscription Form */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-primary);
+    }
+
+    .form-input, .form-textarea {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border-inner);
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-submit-btn {
+      background: var(--btn-grad-compliment);
+      color: #17112c;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.4rem;
+      transition: transform 0.2s ease;
+    }
+
+    .form-submit-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(50px);
+      background: rgba(23, 17, 44, 0.92);
+      border: 1px solid var(--card-border-outer);
+      color: var(--gold-primary);
+      padding: 0.65rem 1.25rem;
+      border-radius: 30px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--gold-glow);
+      backdrop-filter: blur(8px);
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    [data-theme="light"] .toast {
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--gold-primary);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .svg-icon {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particle Effects Canvas -->
+  <canvas id="sparkle-canvas"></canvas>
+
+  <!-- Celestial Background Astrolabe & Constellations -->
+  <div class="celestial-backdrop" aria-hidden="true">
+    <svg class="astrolabe-wheel" viewBox="0 0 800 800" fill="none">
+      <!-- Outer Zodiac Sacred Ring -->
+      <circle cx="400" cy="400" r="380" stroke="url(#goldStroke)" stroke-width="1.5" stroke-dasharray="4 8"/>
+      <circle cx="400" cy="400" r="350" stroke="url(#goldStroke)" stroke-width="1"/>
+      <circle cx="400" cy="400" r="340" stroke="url(#goldStroke)" stroke-width="0.75" stroke-opacity="0.6"/>
+
+      <!-- Sacred Compass Radians -->
+      <line x1="400" y1="20" x2="400" y2="780" stroke="url(#goldStroke)" stroke-width="1" stroke-opacity="0.4"/>
+      <line x1="20" y1="400" x2="780" y2="400" stroke="url(#goldStroke)" stroke-width="1" stroke-opacity="0.4"/>
+      <line x1="131" y1="131" x2="669" y2="669" stroke="url(#goldStroke)" stroke-width="0.7" stroke-opacity="0.25"/>
+      <line x1="131" y1="669" x2="669" y2="131" stroke="url(#goldStroke)" stroke-width="0.7" stroke-opacity="0.25"/>
+
+      <!-- Inner Sacred Geometry Gear (Counter Rotating) -->
+      <g class="astrolabe-inner">
+        <circle cx="400" cy="400" r="240" stroke="url(#goldStroke)" stroke-width="1.5" stroke-dasharray="12 12"/>
+        <polygon points="400,160 480,320 640,400 480,480 400,640 320,480 160,400 320,320" stroke="url(#goldStroke)" stroke-width="1" fill="none" stroke-opacity="0.5"/>
+        <polygon points="400,200 450,350 600,400 450,450 400,600 350,450 200,400 350,350" stroke="url(#goldStroke)" stroke-width="0.75" fill="none" stroke-opacity="0.35"/>
+        <circle cx="400" cy="400" r="100" stroke="url(#goldStroke)" stroke-width="1" stroke-dasharray="6 6"/>
+      </g>
+
+      <defs>
+        <linearGradient id="goldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f5d77f"/>
+          <stop offset="50%" stop-color="#aa8624"/>
+          <stop offset="100%" stop-color="#d4af37"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- Ambient Star Dots (Generated via JS) -->
+  <div id="ambient-stars-container"></div>
+
+  <!-- Top Global Controls: Favorites, Add Card, Theme -->
+  <header class="top-controls">
+    <button class="icon-btn" id="audio-toggle-btn" title="Toggle Sound Effects" aria-label="Toggle Sound Effects">
+      <span id="audio-icon-container">
+        <svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      </span>
+    </button>
+    <button class="icon-btn" id="open-favorites-btn" title="Saved Deck (Favorites)" aria-label="Open Saved Deck">
+      <svg class="svg-icon" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+    </button>
+    <button class="icon-btn" id="open-add-btn" title="Inscribe Custom Card" aria-label="Inscribe Card">
+      <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Night/Day">
+      <span id="theme-icon-container">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </span>
+    </button>
+  </header>
+
+  <!-- Main Tarot Stage (Deck Stack + 3D Active Card) -->
+  <main class="tarot-stage">
+    <div class="deck-stack" id="tarot-deck-stack">
+      <!-- Physical Deck Layers (Below, showing ornamental tarot card backs) -->
+      <div class="deck-layer deck-layer-4">
+        <div class="deck-back-art">
+          <div class="deck-back-inner"></div>
+        </div>
+      </div>
+      <div class="deck-layer deck-layer-3">
+        <div class="deck-back-art">
+          <div class="deck-back-inner">
+            <svg viewBox="0 0 200 300" fill="none" stroke="currentColor">
+              <circle cx="100" cy="150" r="50" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <polygon points="100,105 130,150 100,195 70,150" stroke-width="1.2"/>
+              <polygon points="100,115 120,150 100,185 80,150" stroke-width="0.8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="deck-layer deck-layer-2">
+        <div class="deck-back-art">
+          <div class="deck-back-inner">
+            <svg viewBox="0 0 200 300" fill="none" stroke="currentColor">
+              <circle cx="100" cy="150" r="50" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <polygon points="100,105 130,150 100,195 70,150" stroke-width="1.2"/>
+              <polygon points="100,115 120,150 100,185 80,150" stroke-width="0.8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="deck-layer deck-layer-1">
+        <div class="deck-back-art">
+          <div class="deck-back-inner">
+            <svg viewBox="0 0 200 300" fill="none" stroke="currentColor">
+              <circle cx="100" cy="150" r="50" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <polygon points="100,105 130,150 100,195 70,150" stroke-width="1.2"/>
+              <polygon points="100,115 120,150 100,185 80,150" stroke-width="0.8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Resting Deck Face Directly Underneath Drawn Card -->
+      <div class="deck-layer deck-layer-rim">
+        <div class="deck-back-art">
+          <div class="deck-back-inner">
+            <svg viewBox="0 0 200 300" fill="none" stroke="currentColor">
+              <circle cx="100" cy="150" r="50" stroke-width="1.5" stroke-dasharray="4 4"/>
+              <polygon points="100,105 130,150 100,195 70,150" stroke-width="1.2"/>
+              <polygon points="100,115 120,150 100,185 80,150" stroke-width="0.8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Top Card with Dual Flipper (Back face turns over to Front face) -->
+      <div class="tarot-flipper" id="main-flipper">
+
+        <!-- Card Face Back (Face-down ornamentation visible during flip) -->
+        <div class="card-face card-face-back" aria-hidden="true">
+          <div class="card-back-ornament">
+            <svg class="corner-glyph top-left" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg class="corner-glyph top-right" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg class="corner-glyph bottom-right" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg class="corner-glyph bottom-left" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+
+            <!-- Detailed Celestial Sacred Mandala on card back -->
+            <svg class="back-mandala" viewBox="0 0 240 360" fill="none">
+              <rect x="15" y="15" width="210" height="330" rx="8" stroke="url(#cardBackGold)" stroke-width="1.5" stroke-dasharray="3 3"/>
+              <circle cx="120" cy="180" r="70" stroke="url(#cardBackGold)" stroke-width="1.5"/>
+              <circle cx="120" cy="180" r="60" stroke="url(#cardBackGold)" stroke-width="0.8" stroke-dasharray="4 6"/>
+              <circle cx="120" cy="180" r="32" stroke="url(#cardBackGold)" stroke-width="1"/>
+              <!-- Sacred Star Octagram -->
+              <polygon points="120,115 137,163 185,180 137,197 120,245 103,197 55,180 103,163" stroke="url(#cardBackGold)" stroke-width="1.2" fill="rgba(212, 175, 55, 0.1)"/>
+              <polygon points="120,130 132,168 170,180 132,192 120,230 108,192 70,180 108,168" stroke="url(#cardBackGold)" stroke-width="0.75" fill="none"/>
+              <!-- Radiating Rays -->
+              <line x1="120" y1="95" x2="120" y2="265" stroke="url(#cardBackGold)" stroke-width="0.75" stroke-opacity="0.6"/>
+              <line x1="35" y1="180" x2="205" y2="180" stroke="url(#cardBackGold)" stroke-width="0.75" stroke-opacity="0.6"/>
+              <line x1="60" y1="120" x2="180" y2="240" stroke="url(#cardBackGold)" stroke-width="0.5" stroke-opacity="0.4"/>
+              <line x1="60" y1="240" x2="180" y2="120" stroke="url(#cardBackGold)" stroke-width="0.5" stroke-opacity="0.4"/>
+              <!-- Sunburst Center -->
+              <circle cx="120" cy="180" r="10" fill="url(#cardBackGold)"/>
+              <defs>
+                <linearGradient id="cardBackGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f5d77f"/>
+                  <stop offset="50%" stop-color="#aa8624"/>
+                  <stop offset="100%" stop-color="#d4af37"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Card Face Front (The revealed oracle) -->
+        <article class="card-face card-face-front" id="main-card">
+          <div class="tarot-outer-border">
+
+            <!-- Corner Sacred Flourishes -->
+            <svg class="corner-glyph top-left" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg class="corner-glyph top-right" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg class="corner-glyph bottom-right" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+            <svg class="corner-glyph bottom-left" viewBox="0 0 24 24"><path d="M3 3h8M3 3v8M3 3l6 6" stroke="currentColor" fill="none" stroke-width="2"/></svg>
+
+            <div class="tarot-inner-border">
+              
+              <!-- Tarot Header / Arcana Details -->
+              <header class="tarot-header">
+                <span class="tarot-roman" id="tarot-roman">XXI</span>
+                <div class="tarot-subheader">
+                  <div class="tarot-line"></div>
+                  <span class="tarot-type-tag" id="tarot-type-label">THE COMPLIMENT</span>
+                  <div class="tarot-line"></div>
+                </div>
+              </header>
+
+              <!-- Oracle Center Display -->
+              <section class="oracle-window" aria-live="polite">
+                <div class="oracle-halo"></div>
+                <div class="oracle-text-container">
+                  <h2 class="oracle-title" id="oracle-card-title">✦ Radiant Luminary ✦</h2>
+                  <p class="oracle-message" id="compliment-text">
+                    Draw a card below to reveal your daily blessing or lighthearted charm.
+                  </p>
+                  <div id="punchline-container"></div>
+                </div>
+              </section>
+
+              <!-- Middle Tools: Copy, Favorite -->
+              <div class="tarot-toolbar">
+                <button class="card-tool-btn" id="copy-btn" title="Copy Card Inscription" aria-label="Copy to Clipboard">
+                  <svg class="svg-icon" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+                <button class="card-tool-btn" id="favorite-btn" title="Save this Card" aria-label="Favorite this Card">
+                  <svg class="svg-icon" id="heart-icon-svg" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                </button>
+              </div>
+
+              <!-- Dual Card Action Triggers -->
+              <div class="tarot-actions">
+                <button class="mystic-btn btn-compliment" id="generate-btn" type="button">
+                  <span>✦ Draw Compliment</span>
+                </button>
+                <button class="mystic-btn btn-joke" id="joke-btn" type="button">
+                  <span>✧ Draw A Joke</span>
+                </button>
+              </div>
+
+              <!-- Footer Moon Phases -->
+              <footer class="tarot-footer" aria-hidden="true">
+                <span>☽</span>
+                <span>●</span>
+                <span>✦</span>
+                <span>●</span>
+                <span>☾</span>
+              </footer>
+
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- Favorites Deck Modal -->
+  <div class="modal-backdrop" id="fav-modal" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">✦ Preserved Arcana</h3>
+        <button class="modal-close-btn" id="close-fav-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="fav-list" id="favorites-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Card Inscription Modal -->
+  <div class="modal-backdrop" id="add-modal" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">✦ Inscribe New Card</h3>
+        <button class="modal-close-btn" id="close-add-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="custom-form">
+        <div class="form-group">
+          <label class="form-label" for="custom-title">Card Name</label>
+          <input type="text" id="custom-title" class="form-input" placeholder="e.g. The Unstoppable Wit" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="custom-text">Affirmation or Inscription</label>
+          <textarea id="custom-text" class="form-textarea" placeholder="Inscribe your personal wisdom or warm thought..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit-btn">Seal Into The Deck</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span>✦</span>
+    <span id="toast-msg">Card preserved</span>
+  </div>
+
+  <!-- ==========================================================================
+       Application Data & Logic
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       DATASET: 100 Unique Compliments & 50 Jokes with Punchlines
+       ========================================================================== */
+    const complimentData = [
+      { title: "The Cosmic Spark", text: "You have main character energy, but in the wholesome way where everyone in the tavern roots for you." },
+      { title: "The Lucky Charm", text: "Finding you in a crowd is like discovering an unexpected bonus curly fry at the bottom of the bag." },
+      { title: "The Calming Aura", text: "Your presence is softer and more reassuring than a warm cup of cocoa on a snowy Sunday morning." },
+      { title: "The Steady Anchor", text: "You handle chaotic emergencies with the calm confidence of someone who knows all the keyboard shortcuts." },
+      { title: "The Radiant Sun", text: "Your smile could easily power a small, quaint European village during a power outage." },
+      { title: "The Wise Sage", text: "You give the kind of advice people remember years later during a shower and whisper, 'They were so right.'" },
+      { title: "The Master Chef of Vibes", text: "You don't just enter a room; you gently season it with goodwill and cozy laughter." },
+      { title: "The Reliable Horizon", text: "You are the human equivalent of getting every green light when you're slightly behind schedule." },
+      { title: "The Quick Thinker", text: "Your brain operates at such a fun, creative angle that boring problems immediately surrender to you." },
+      { title: "The Genuine Soul", text: "Your authenticity is so refreshing in a world that constantly tries to use too many filters." },
+      { title: "The Gentle Giant", text: "Your kindness doesn't scream for attention, but it echoes everywhere you leave your footprints." },
+      { title: "The Golden Thread", text: "You have a gift for holding groups together with seamless grace and effortless humor." },
+      { title: "The Pure Delight", text: "Being around you feels like finally taking your shoes off after a long hike in brand-new boots." },
+      { title: "The Bright Horizon", text: "You somehow always manage to spot the silver lining, even when the cloud looks like a storm giant." },
+      { title: "The Keen Observer", text: "You notice the little things people love about themselves that nobody else ever mentions." },
+      { title: "The Warm Hearth", text: "People breathe a little easier whenever you arrive, knowing a trustworthy friend is in the room." },
+      { title: "The Electric Wit", text: "Your comedic timing could save a floundering theatrical production in three lines flat." },
+      { title: "The Patient Weaver", text: "You explain complex things without making anyone feel small—a truly legendary superpower." },
+      { title: "The Unsung Hero", text: "The quiet favors you do without taking credit are quietly balancing the entire universe." },
+      { title: "The Guiding Star", text: "You make doing the right thing look natural, attractive, and fun." },
+      { title: "The Creative Dynamo", text: "Your imagination doesn't just think outside the box; it folded the box into an origami crane." },
+      { title: "The Trusty Compass", text: "Your moral instincts are sharper than a freshly sharpened obsidian dagger." },
+      { title: "The Restful Oasis", text: "Conversation with you never feels like work; it feels like sinking into a hammock under the stars." },
+      { title: "The Fearless Heart", text: "You keep showing up with an open heart even after days that tried their best to discourage you." },
+      { title: "The Secret Ingredient", text: "Whatever team, project, or party you join instantly becomes 40% more delightful." },
+      { title: "The Gracious Host", text: "You make newcomers feel like cherished lifelong companions within three minutes of meeting." },
+      { title: "The Hidden Strength", text: "You possess a quiet resilience that boulders and ancient oak trees would envy." },
+      { title: "The Joyful Breeze", text: "Your laugh is completely infectious and should probably come with a mild contagious advisory." },
+      { title: "The Thoughtful Maker", text: "The care and pride you put into even small everyday tasks is an art form in itself." },
+      { title: "The True Original", text: "There isn't a carbon copy of you in any timeline, multiverse, or pocket dimension—and that's wonderful." },
+      { title: "The Bright Lantern", text: "You have an instinct for cheering someone up right when they were about to give up on their day." },
+      { title: "The Grounded Stone", text: "When life gets theatrical and loud, you remain the calm, steady rock everyone leans on." },
+      { title: "The Quick Study", text: "The speed at which you pick up new skills is honestly bordering on supernatural wizardry." },
+      { title: "The Playful Spirit", text: "You remind everyone around you that growing older is mandatory, but growing dull is strictly optional." },
+      { title: "The Velvet Voice", text: "Even when giving tough feedback, you deliver it with so much tact and respect that people thank you." },
+      { title: "The Generous Heart", text: "You share your snacks, your time, and your knowledge without ever keeping a scoreboard." },
+      { title: "The Attentive Ear", text: "You listen with your whole attention, not just waiting for your turn to speak." },
+      { title: "The Clever Crafter", text: "You find elegant, clever solutions while everyone else is still arguing over the rulebook." },
+      { title: "The Cozy Blanket", text: "You give the best hugs—the kind that feel like putting on a hoodie straight out of the dryer." },
+      { title: "The Fresh Perspective", text: "You ask the one insightful question in meetings that saves everyone three weeks of confused labor." },
+      { title: "The Steadfast Shield", text: "Friends never have to defend their honor when you're in the room; you speak up for them automatically." },
+      { title: "The Lighthearted Alchemist", text: "You turn awkward social pauses into charming, memorable inside jokes." },
+      { title: "The Sharp Eye", text: "Your aesthetic taste is immaculate; you can make mismatched thrift store items look like a gallery." },
+      { title: "The Tireless Champion", text: "When you believe in someone, your cheerleading gives them wings they didn't know they owned." },
+      { title: "The Gentle Humorist", text: "You tease people with warmth, never punching down or leaving a sting." },
+      { title: "The Open Door", text: "Your hospitality makes people feel at home before they even hang up their coats." },
+      { title: "The Golden Hour", text: "You bring that magical late-afternoon warmth into routine, boring Tuesday morning conversations." },
+      { title: "The Master of Balance", text: "You know when to push hard and when to rest, which is the rarest wisdom of all." },
+      { title: "The Quiet Force", text: "You don't need to shout to command respect; your consistency speaks with a megaphone." },
+      { title: "The Joy Bringer", text: "Just thinking about your funny antics has saved several people from bad moods this week alone." },
+      { title: "The Honest Mirror", text: "You reflect back the best versions of your friends so they can see what you admire." },
+      { title: "The Midnight Star", text: "When things feel dark, your optimism isn't naive—it's brave, well-earned, and inspiring." },
+      { title: "The Master of Grace", text: "You apologize cleanly without excuses when mistaken, which is true royalty behavior." },
+      { title: "The Intuitive Guide", text: "You can read the room before anyone even finishes clearing their throat." },
+      { title: "The Spark of Wonder", text: "Your enthusiasm for small delights—like a cool bug or pretty cloud—makes the world feel magical." },
+      { title: "The Unshakable Ally", text: "You don't disappear when the going gets tough; you show up with tea and rolled-up sleeves." },
+      { title: "The Deep Well", text: "Your emotional depth gives people permission to be honest about their own real feelings." },
+      { title: "The Patient Teacher", text: "You teach without an ounce of condescension, celebrating every tiny step of progress." },
+      { title: "The Living Sunshine", text: "You are proof that warmth and kindness are choices that can transform an entire community." },
+      { title: "The Clever Diplomat", text: "You can de-escalate sibling squabbles and heated debates with a single well-timed quip." },
+      { title: "The Boundary Keeper", text: "Your ability to say a polite, firm 'no' with a warm smile is an inspiring life skill." },
+      { title: "The Storyteller", text: "Even your mundane grocery store runs turn into riveting adventures when you recount them." },
+      { title: "The Constant Friend", text: "Years can pass without speaking, yet picking up with you feels like no time was lost at all." },
+      { title: "The Serene Captain", text: "You steer your ship with calm hands even when the waves are cresting five meters high." },
+      { title: "The Cheerful Dynamo", text: "Your energy on a team project is like discovering a second wind after running a mile uphill." },
+      { title: "The Insightful Mind", text: "You connect concepts from completely different subjects and create brand-new epiphanies." },
+      { title: "The Loyal Keeper", text: "Secrets told to you are safer than gold buried in an enchanted subterranean vault." },
+      { title: "The Natural Host", text: "You always make sure the quietest person at the dinner table gets their chance to shine." },
+      { title: "The Breath of Air", text: "You break through stuffy pretension with pure, honest, down-to-earth simplicity." },
+      { title: "The Humble Maestro", text: "You are extraordinarily gifted at what you do, yet you never brag or make others feel inferior." },
+      { title: "The Wonder Seeker", text: "You still look at the night sky like you're personally searching for secret constellations." },
+      { title: "The Comfort Zone Expander", text: "You gently encourage friends to take healthy leaps they're secretly ready for." },
+      { title: "The Quick Forgiver", text: "You don't let bitterness rent free space in your head; you travel light and joyful." },
+      { title: "The Keen Strategist", text: "You anticipate pitfalls four steps before anyone else even notices the terrain has changed." },
+      { title: "The Welcoming Smile", text: "Your greeting makes people feel like they're the guest of honor at their own life." },
+      { title: "The Silver Tongue", text: "You can write a polite thank-you card that brings genuine tears of joy to the recipient." },
+      { title: "The Steady Pulse", text: "You don't get tossed around by every passing social trend; you know who you are." },
+      { title: "The Warm Flame", text: "You kindle confidence in insecure people without them even realizing you built the fire." },
+      { title: "The Good Sport", text: "You win with quiet modesty and lose with cheerful sportsmanship and high fives." },
+      { title: "The Curious Soul", text: "Your wide-eyed curiosity keeps your spirit young, vibrant, and perpetually interesting." },
+      { title: "The Unsung Guardian", text: "You notice when someone's glass is empty or when their shoelace is untied before they trip." },
+      { title: "The Creative Magpie", text: "You gather odd, wonderful ideas and build them into completely unexpected works of art." },
+      { title: "The Safe Haven", text: "People can tell you their weirdest childhood memories without any fear of being judged." },
+      { title: "The Cheerful Spark", text: "You are the human version of that pleasant ding when an elevator arrives at your floor." },
+      { title: "The Polished Gem", text: "Every hard trial you've weathered has only made your character smoother and more brilliant." },
+      { title: "The Patient Sower", text: "You plant seeds of kindness today that will bloom into shade trees for others tomorrow." },
+      { title: "The Sharp Wit", text: "You can make an entire cafeteria table laugh so hard that someone snorts their milk." },
+      { title: "The Radiant Beacon", text: "You remind people why optimism is worth fighting for every single morning." },
+      { title: "The Kind Conductor", text: "You orchestrate complex family gatherings with zero drama and maximum dessert." },
+      { title: "The Loyal Shadow", text: "When someone is having an awful day, you sit with them in the quiet without forcing empty talk." },
+      { title: "The Bold Adventurer", text: "You are willing to look a little goofy while trying something new and exciting." },
+      { title: "The Sweet Symphony", text: "You bring rhythm and balance into households that used to run on panic and clutter." },
+      { title: "The Master Crafter", text: "Your hands know how to fix, build, and mend things that others would throw away." },
+      { title: "The Silver Lining", text: "You find the humor in burnt toast, flat tires, and unexpected rain showers." },
+      { title: "The True North", text: "In a world of fluctuating opinions, your integrity remains perfectly calibrated." },
+      { title: "The Gentle Rain", text: "Your compliments don't overwhelm; they nourish people right at their roots." },
+      { title: "The Bright Morning", text: "The world is noticeably softer, kinder, and more interesting simply because you inhabit it." },
+      { title: "The Unstoppable Joy", text: "Your happiness isn't easily stolen by bad traffic or minor spilled coffee." },
+      { title: "The Rare Diamond", text: "You are genuinely, undeniably one-of-a-kind, and today is lucky to have you." },
+      { title: "The Golden Arcana", text: "You are the card everyone hopes to draw from the deck of life." }
+    ];
+
+    const jokeData = [
+      { title: "The Herbologist's Dilemma", setup: "Why do we tell actors to 'break a leg'?", punchline: "Because every play has a cast!" },
+      { title: "The Clockmaker's Jest", setup: "Why did the scarecrow win a Nobel Prize?", punchline: "Because he was outstanding in his field!" },
+      { title: "The Celestial Astronomer", setup: "How do you organize a party in outer space?", punchline: "You planet!" },
+      { title: "The Nautical Mystic", setup: "Why don't oysters donate to charity?", punchline: "Because they are shellfish!" },
+      { title: "The Mountain Hermit", setup: "What do you call a fake noodle?", punchline: "An impasta!" },
+      { title: "The Royal Treasurer", setup: "Why did the coffee file a police report?", punchline: "It got mugged!" },
+      { title: "The Desert Nomad", setup: "What do you call a sleeping dinosaur?", punchline: "A dino-snore!" },
+      { title: "The Forest Druid", setup: "Why did the bicycle fall over?", punchline: "Because it was two-tired!" },
+      { title: "The Arctic Wanderer", setup: "What do penguins wear on their feet?", punchline: "Flipper-slippers!" },
+      { title: "The Bookbinder's Riddle", setup: "Why was the math book always crying?", punchline: "It had way too many problems." },
+      { title: "The Alchemist's Quip", setup: "What did the limestone say to the geologist?", punchline: "'Don't take me for granite!'" },
+      { title: "The Solar Oracle", setup: "Why did the tomato turn bright red?", punchline: "Because it saw the salad dressing!" },
+      { title: "The Cobbler's Chuckle", setup: "What do you call a bear with no teeth?", punchline: "A gummy bear!" },
+      { title: "The Castle Cook", setup: "Why did the cookie visit the nurse?", punchline: "Because it was feeling crumbly." },
+      { title: "The Feathered Bard", setup: "Why do ducks have feathers?", punchline: "To cover their butt quacks!" },
+      { title: "The Ocean Whisperer", setup: "Where do fish keep their money?", punchline: "In the river bank!" },
+      { title: "The Gentle Gardner", setup: "What did one wall say to the other wall?", punchline: "'I'll meet you at the corner!'" },
+      { title: "The Moonlit Knight", setup: "Why can't Elsa have a balloon?", punchline: "Because she will let it go!" },
+      { title: "The Silent Mime", setup: "What kind of shoes do ninjas wear?", punchline: "Sneakers!" },
+      { title: "The Royal Gardner", setup: "What did the little tree say to the big tree?", punchline: "'Leaf me alone!'" },
+      { title: "The Traveling Troubadour", setup: "Why did the golfer bring two pairs of pants?", punchline: "In case he got a hole in one!" },
+      { title: "The Ancient Potter", setup: "What did the zero say to the eight?", punchline: "'Nice belt!'" },
+      { title: "The Starry Traveler", setup: "How does a penguin build its house?", punchline: "Igloos it together!" },
+      { title: "The Candle Maker", setup: "Why was the belt arrested?", punchline: "For holding up a pair of pants!" },
+      { title: "The Village Baker", setup: "What did the dough say after getting baked?", punchline: "'That was toast-ally awesome!'" },
+      { title: "The Wandering Minstrel", setup: "Why are elevator jokes always so classic?", punchline: "They work on so many levels." },
+      { title: "The Wise Owl", setup: "What do you call cheese that isn't yours?", punchline: "Nacho cheese!" },
+      { title: "The Crystal Gazer", setup: "Why did the picture go to jail?", punchline: "Because it was framed!" },
+      { title: "The Forest Gnome", setup: "What do you call an alligator in a stylish vest?", punchline: "An investigator!" },
+      { title: "The Ship Captain", setup: "How do you make a tissue dance?", punchline: "You put a little boogie in it!" },
+      { title: "The Desert Fox", setup: "What did the baby corn ask its mama?", punchline: "'Where does pop-corn come from?'" },
+      { title: "The Meadow Fairy", setup: "Why did the bee get married?", punchline: "Because he found his honey!" },
+      { title: "The Clock Keeper", setup: "What time is it when an elephant sits on a fence?", punchline: "Time to buy a new fence!" },
+      { title: "The Schoolmaster", setup: "Why did the music teacher need a ladder?", punchline: "To reach the high notes!" },
+      { title: "The Cloud Watcher", setup: "What did one cloud say to lightning?", punchline: "'You're striking!'" },
+      { title: "The River Guide", setup: "Why can't you give Elsa a frozen pizza?", punchline: "Because she'll never let it thaw!" },
+      { title: "The Orchard Warden", setup: "How do apples travel together?", punchline: "In apple carts!" },
+      { title: "The Mystic Blacksmith", setup: "What kind of music do balloons hate?", punchline: "Pop music!" },
+      { title: "The Wandering Jester", setup: "Why did the banana go to the doctor?", punchline: "Because it wasn't peeling well!" },
+      { title: "The Stone Carver", setup: "What do you call an elephant that doesn't matter?", punchline: "An irrelephant!" },
+      { title: "The Star Map Maker", setup: "Why did the astronaut break up with his girlfriend?", punchline: "He just needed space." },
+      { title: "The Farm Steward", setup: "Why did the cow jump over the moon?", punchline: "Because the farmer had cold hands!" },
+      { title: "The Library Guardian", setup: "What has four wheels and flies?", punchline: "A garbage truck!" },
+      { title: "The Sun Seeker", setup: "Why did the stadium get so hot after the game?", punchline: "All the fans left!" },
+      { title: "The Tea Master", setup: "What did the teapot say when it was angry?", punchline: "It blew off some steam!" },
+      { title: "The Secret Agent", setup: "Why do birds fly south for the winter?", punchline: "Because it's way too far to walk!" },
+      { title: "The Hearth Tender", setup: "What kind of room has no doors or windows?", punchline: "A mushroom!" },
+      { title: "The Map Collector", setup: "Why did the skeleton cross the road?", punchline: "To get to the body shop!" },
+      { title: "The Royal Jester", setup: "What goes up and down but never moves?", punchline: "A flight of stairs!" },
+      { title: "The Grand Finale Jest", setup: "Why did the lamp get sent to detention?", punchline: "Because it wasn't very bright!" }
+    ];
+
+    /* ==========================================================================
+       State Management
+       ========================================================================== */
+    const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
+    let currentMode = 'compliment'; // 'compliment' or 'joke'
+    let currentInscribedText = "";
+    let lastComplimentIdx = -1;
+    let lastJokeIdx = -1;
+    let punchlineTimer = null;
+
+    let favorites = JSON.parse(localStorage.getItem('tarot_favorites') || '[]');
+    let customItems = JSON.parse(localStorage.getItem('tarot_custom') || '[]');
+
+    /* ==========================================================================
+       DOM Elements
+       ========================================================================== */
+    const complimentTextEl = document.getElementById('compliment-text');
+    const punchlineContainer = document.getElementById('punchline-container');
+    const oracleCardTitle = document.getElementById('oracle-card-title');
+    const tarotRomanEl = document.getElementById('tarot-roman');
+    const tarotTypeLabel = document.getElementById('tarot-type-label');
+    const generateBtn = document.getElementById('generate-btn');
+    const jokeBtn = document.getElementById('joke-btn');
+    const copyBtn = document.getElementById('copy-btn');
+    const favoriteBtn = document.getElementById('favorite-btn');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const themeIconContainer = document.getElementById('theme-icon-container');
+    const audioToggleBtn = document.getElementById('audio-toggle-btn');
+    const audioIconContainer = document.getElementById('audio-icon-container');
+    const tarotDeckStack = document.getElementById('tarot-deck-stack');
+    const toastEl = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-msg');
+    const favModal = document.getElementById('fav-modal');
+    const openFavBtn = document.getElementById('open-favorites-btn');
+    const closeFavBtn = document.getElementById('close-fav-btn');
+    const favContainer = document.getElementById('favorites-container');
+    const addModal = document.getElementById('add-modal');
+    const openAddBtn = document.getElementById('open-add-btn');
+    const closeAddBtn = document.getElementById('close-add-btn');
+    const customForm = document.getElementById('custom-form');
+    const customTitleInput = document.getElementById('custom-title');
+    const customTextInput = document.getElementById('custom-text');
+    const mainCardEl = document.getElementById('main-card');
+    const mainFlipperEl = document.getElementById('main-flipper');
+
+    /* ==========================================================================
+       Synthesized Tarot Card Flip & Whoosh Sound Effects (Web Audio API)
+       ========================================================================== */
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playCardFlipSound() {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+
+        const now = audioCtx.currentTime;
+
+        // 1. Air whoosh / card sliding off linen deck (Filtered White Noise)
+        const bufferSize = audioCtx.sampleRate * 0.35;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+
+        const noiseFilter = audioCtx.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.setValueAtTime(650, now);
+        noiseFilter.frequency.exponentialRampToValueAtTime(1400, now + 0.15);
+        noiseFilter.frequency.exponentialRampToValueAtTime(450, now + 0.32);
+        noiseFilter.Q.setValueAtTime(1.8, now);
+
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.setValueAtTime(0.001, now);
+        noiseGain.gain.linearRampToValueAtTime(0.18, now + 0.08);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+        whiteNoise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(audioCtx.destination);
+
+        whiteNoise.start(now);
+        whiteNoise.stop(now + 0.34);
+
+        // 2. Audible snap / linen card snap when turning over (mid-flip ~0.26s)
+        const snapOsc = audioCtx.createOscillator();
+        const snapGain = audioCtx.createGain();
+        snapOsc.type = 'triangle';
+        snapOsc.frequency.setValueAtTime(190, now + 0.22);
+        snapOsc.frequency.exponentialRampToValueAtTime(55, now + 0.33);
+
+        snapGain.gain.setValueAtTime(0.0001, now + 0.22);
+        snapGain.gain.linearRampToValueAtTime(0.24, now + 0.23);
+        snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.34);
+
+        snapOsc.connect(snapGain);
+        snapGain.connect(audioCtx.destination);
+
+        snapOsc.start(now + 0.22);
+        snapOsc.stop(now + 0.35);
+
+        // 3. Subtle ethereal shimmer chime on reveal (~0.4s)
+        const chimeOsc = audioCtx.createOscillator();
+        const chimeGain = audioCtx.createGain();
+        chimeOsc.type = 'sine';
+        chimeOsc.frequency.setValueAtTime(currentMode === 'joke' ? 620 : 784, now + 0.38); // G5 / Eb5
+        chimeOsc.frequency.exponentialRampToValueAtTime(currentMode === 'joke' ? 830 : 1046, now + 0.58);
+
+        chimeGain.gain.setValueAtTime(0.0001, now + 0.38);
+        chimeGain.gain.linearRampToValueAtTime(0.05, now + 0.42);
+        chimeGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+
+        chimeOsc.connect(chimeGain);
+        chimeGain.connect(audioCtx.destination);
+
+        chimeOsc.start(now + 0.38);
+        chimeOsc.stop(now + 0.72);
+      } catch (err) {
+        // Fallback gracefully if Web Audio is blocked
+      }
+    }
+
+    /* Audio Toggle Button Handler */
+    audioToggleBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      if (soundEnabled) {
+        initAudio();
+        audioToggleBtn.classList.remove('muted');
+        audioToggleBtn.title = 'Sound Effects: On';
+        audioIconContainer.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+        showToast('Sound effects enabled');
+      } else {
+        audioToggleBtn.classList.add('muted');
+        audioToggleBtn.title = 'Sound Effects: Muted';
+        audioIconContainer.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+        showToast('Sound effects muted');
+      }
+    });
+
+    /* ==========================================================================
+       Ambient Twinkling Stars
+       ========================================================================== */
+    const starsContainer = document.getElementById('ambient-stars-container');
+    function generateAmbientStars(count = 28) {
+      starsContainer.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.className = 'ambient-star';
+        const size = Math.random() * 2.5 + 1.2;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.top = `${Math.random() * 100}vh`;
+        star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        star.style.animationDelay = `${Math.random() * 3}s`;
+        starsContainer.appendChild(star);
+      }
+    }
+    generateAmbientStars();
+
+    /* ==========================================================================
+       Sparkles / Particle Canvas Animation
+       ========================================================================== */
+    const canvas = document.getElementById('sparkle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class SparkleParticle {
+      constructor(x, y, color = 'gold') {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 4 + 2;
+        this.speedX = (Math.random() - 0.5) * 8;
+        this.speedY = (Math.random() - 0.5) * 8 - 2;
+        this.life = 1;
+        this.decay = Math.random() * 0.025 + 0.015;
+        this.colorType = color;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.speedY += 0.12; // light gravity
+        this.life -= this.decay;
+        this.size *= 0.96;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.life);
+        ctx.translate(this.x, this.y);
+
+        if (this.colorType === 'purple') {
+          ctx.fillStyle = '#c084fc';
+          ctx.shadowColor = '#a855f7';
+        } else {
+          ctx.fillStyle = '#fde68a';
+          ctx.shadowColor = '#f59e0b';
+        }
+        ctx.shadowBlur = 8;
+
+        // Draw 4-point star shape
+        ctx.beginPath();
+        ctx.moveTo(0, -this.size);
+        ctx.lineTo(this.size * 0.3, -this.size * 0.3);
+        ctx.lineTo(this.size, 0);
+        ctx.lineTo(this.size * 0.3, this.size * 0.3);
+        ctx.lineTo(0, this.size);
+        ctx.lineTo(-this.size * 0.3, this.size * 0.3);
+        ctx.lineTo(-this.size, 0);
+        ctx.lineTo(-this.size * 0.3, -this.size * 0.3);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    function createSparkleBurst(x, y, count = 20, color = 'gold') {
+      for (let i = 0; i < count; i++) {
+        particles.push(new SparkleParticle(x, y, color));
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].life <= 0 || particles[i].size <= 0.2) {
+          particles.splice(i, 1);
+        }
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ==========================================================================
+       Card Drawing: Compliment vs. Joke with 3D Flip
+       ========================================================================== */
+    function getRandomRoman() {
+      return ROMAN_NUMERALS[Math.floor(Math.random() * ROMAN_NUMERALS.length)];
+    }
+
+    function animateCardFlip(callback) {
+      // Play audio on flip initiation
+      playCardFlipSound();
+
+      // Recoil deck stack beneath to simulate physical card draw
+      if (tarotDeckStack) {
+        tarotDeckStack.classList.remove('deck-draw-recoil');
+        void tarotDeckStack.offsetWidth;
+        tarotDeckStack.classList.add('deck-draw-recoil');
+      }
+
+      mainFlipperEl.classList.remove('dealing');
+      // Trigger browser reflow to reliably restart the reader flip animation
+      void mainFlipperEl.offsetWidth;
+      mainFlipperEl.classList.add('dealing');
+
+      // Update card content at 420ms (when card is edge-on / past 90 degrees)
+      setTimeout(() => {
+        if (typeof callback === 'function') callback();
+      }, 420);
+
+      setTimeout(() => {
+        mainFlipperEl.classList.remove('dealing');
+        if (tarotDeckStack) tarotDeckStack.classList.remove('deck-draw-recoil');
+      }, 850);
+    }
+
+    function triggerCompliment(e) {
+      clearTimeout(punchlineTimer);
+      currentMode = 'compliment';
+
+      const pool = [...complimentData, ...customItems];
+      let nextIdx;
+      do {
+        nextIdx = Math.floor(Math.random() * pool.length);
+      } while (nextIdx === lastComplimentIdx && pool.length > 1);
+      lastComplimentIdx = nextIdx;
+
+      const item = pool[nextIdx];
+      currentInscribedText = item.text;
+
+      // Burst gold sparkles
+      const btnRect = generateBtn.getBoundingClientRect();
+      const originX = (e && e.clientX) ? e.clientX : (btnRect.left + btnRect.width / 2);
+      const originY = (e && e.clientY) ? e.clientY : (btnRect.top + btnRect.height / 2);
+      createSparkleBurst(originX, originY, 24, 'gold');
+
+      punchlineContainer.innerHTML = '';
+
+      // Flip card and swap text at mid-turn
+      animateCardFlip(() => {
+        tarotRomanEl.textContent = getRandomRoman();
+        tarotTypeLabel.textContent = "THE COMPLIMENT";
+        oracleCardTitle.textContent = `✦ ${item.title || "The Blessing"} ✦`;
+        complimentTextEl.textContent = item.text;
+        updateHeartState();
+      });
+    }
+
+    function triggerJoke(e) {
+      clearTimeout(punchlineTimer);
+      currentMode = 'joke';
+
+      let nextIdx;
+      do {
+        nextIdx = Math.floor(Math.random() * jokeData.length);
+      } while (nextIdx === lastJokeIdx && jokeData.length > 1);
+      lastJokeIdx = nextIdx;
+
+      const item = jokeData[nextIdx];
+      currentInscribedText = `${item.setup} — ${item.punchline}`;
+
+      // Burst purple/mystic sparkles
+      const btnRect = jokeBtn.getBoundingClientRect();
+      const originX = (e && e.clientX) ? e.clientX : (btnRect.left + btnRect.width / 2);
+      const originY = (e && e.clientY) ? e.clientY : (btnRect.top + btnRect.height / 2);
+      createSparkleBurst(originX, originY, 24, 'purple');
+
+      // Flip card and swap text at mid-turn
+      animateCardFlip(() => {
+        tarotRomanEl.textContent = getRandomRoman();
+        tarotTypeLabel.textContent = "THE JEST";
+        oracleCardTitle.textContent = `✦ ${item.title} ✦`;
+        complimentTextEl.textContent = item.setup;
+        punchlineContainer.innerHTML = `
+          <div class="punchline-loading" id="punchline-wait">
+            <span>Consulting the stars</span>
+            <span class="loading-dot"></span>
+            <span class="loading-dot"></span>
+            <span class="loading-dot"></span>
+          </div>
+        `;
+        updateHeartState();
+
+        // Animate the punchline after 2.4 seconds
+        punchlineTimer = setTimeout(() => {
+          punchlineContainer.innerHTML = `
+            <div class="joke-punchline" id="punchline-box">
+              ${item.punchline}
+            </div>
+          `;
+          requestAnimationFrame(() => {
+            const punchBox = document.getElementById('punchline-box');
+            if (punchBox) {
+              punchBox.classList.add('revealed');
+              createSparkleBurst(originX, originY - 80, 14, 'purple');
+            }
+          });
+        }, 2400);
+      });
+    }
+
+    function updateHeartState() {
+      if (favorites.includes(currentInscribedText)) {
+        favoriteBtn.classList.add('liked');
+        favoriteBtn.setAttribute('title', 'Preserved in deck');
+      } else {
+        favoriteBtn.classList.remove('liked');
+        favoriteBtn.setAttribute('title', 'Save card');
+      }
+    }
+
+    /* ==========================================================================
+       Toast Helper
+       ========================================================================== */
+    let toastTimeout;
+    function showToast(msg) {
+      clearTimeout(toastTimeout);
+      toastMsg.textContent = msg;
+      toastEl.classList.add('show');
+      toastTimeout = setTimeout(() => {
+        toastEl.classList.remove('show');
+      }, 2400);
+    }
+
+    /* ==========================================================================
+       Actions: Copy, Favorite
+       ========================================================================== */
+    copyBtn.addEventListener('click', () => {
+      if (!currentInscribedText) return;
+      const textarea = document.createElement('textarea');
+      textarea.value = `✦ ${oracleCardTitle.textContent} ✦\n"${currentInscribedText}"`;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Card inscription copied!');
+      } catch (err) {
+        showToast('Unable to copy');
+      }
+      document.body.removeChild(textarea);
+    });
+
+    favoriteBtn.addEventListener('click', () => {
+      if (!currentInscribedText) return;
+      const idx = favorites.indexOf(currentInscribedText);
+      if (idx === -1) {
+        favorites.push(currentInscribedText);
+        showToast('Card saved to your deck!');
+      } else {
+        favorites.splice(idx, 1);
+        showToast('Removed from saved deck');
+      }
+      localStorage.setItem('tarot_favorites', JSON.stringify(favorites));
+      updateHeartState();
+      renderFavorites();
+    });
+
+    /* ==========================================================================
+       Favorites Modal Handling
+       ========================================================================== */
+    function renderFavorites() {
+      favContainer.innerHTML = '';
+      if (favorites.length === 0) {
+        favContainer.innerHTML = `
+          <div style="text-align: center; color: var(--text-muted); padding: 1.5rem 0; font-family: 'Cinzel', serif; font-size: 0.88rem;">
+            No cards preserved yet. Click the heart on any card to save it here.
+          </div>
+        `;
+        return;
+      }
+
+      favorites.forEach((text, i) => {
+        const item = document.createElement('div');
+        item.className = 'fav-item';
+        item.innerHTML = `
+          <div class="fav-text">"${text}"</div>
+          <button class="fav-del-btn" data-index="${i}" title="Remove Card" aria-label="Remove Card">
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></svg>
+          </button>
+        `;
+        favContainer.appendChild(item);
+      });
+
+      // Bind delete handlers
+      favContainer.querySelectorAll('.fav-del-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(btn.getAttribute('data-index'));
+          favorites.splice(idx, 1);
+          localStorage.setItem('tarot_favorites', JSON.stringify(favorites));
+          updateHeartState();
+          renderFavorites();
+          showToast('Card discarded from deck');
+        });
+      });
+    }
+
+    openFavBtn.addEventListener('click', () => {
+      renderFavorites();
+      favModal.classList.add('active');
+      favModal.setAttribute('aria-hidden', 'false');
+    });
+
+    closeFavBtn.addEventListener('click', () => {
+      favModal.classList.remove('active');
+      favModal.setAttribute('aria-hidden', 'true');
+    });
+
+    /* ==========================================================================
+       Custom Inscription Modal Handling
+       ========================================================================== */
+    openAddBtn.addEventListener('click', () => {
+      addModal.classList.add('active');
+      addModal.setAttribute('aria-hidden', 'false');
+      customTitleInput.focus();
+    });
+
+    closeAddBtn.addEventListener('click', () => {
+      addModal.classList.remove('active');
+      addModal.setAttribute('aria-hidden', 'true');
+    });
+
+    customForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = customTitleInput.value.trim();
+      const text = customTextInput.value.trim();
+
+      if (!title || !text) return;
+
+      const newItem = { title, text };
+      customItems.push(newItem);
+      localStorage.setItem('tarot_custom', JSON.stringify(customItems));
+
+      customTitleInput.value = '';
+      customTextInput.value = '';
+      addModal.classList.remove('active');
+      addModal.setAttribute('aria-hidden', 'true');
+      showToast('New card inscribed into the deck!');
+
+      // Present it immediately
+      currentMode = 'compliment';
+      currentInscribedText = newItem.text;
+      tarotRomanEl.textContent = 'XXII';
+      tarotTypeLabel.textContent = 'CUSTOM ARCANA';
+      oracleCardTitle.textContent = `✦ ${newItem.title} ✦`;
+      complimentTextEl.textContent = newItem.text;
+      punchlineContainer.innerHTML = '';
+      updateHeartState();
+    });
+
+    // Close Modals on click outside
+    [favModal, addModal].forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+
+    /* ==========================================================================
+       Dark / Light Theme Toggle
+       ========================================================================== */
+    function updateThemeUI(theme) {
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeIconContainer.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeIconContainer.innerHTML = '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('tarot_theme') || 'dark';
+    updateThemeUI(savedTheme);
+
+    themeToggleBtn.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const newTheme = isLight ? 'dark' : 'light';
+      localStorage.setItem('tarot_theme', newTheme);
+      updateThemeUI(newTheme);
+    });
+
+    /* ==========================================================================
+       Event Listeners & Keyboard Navigation
+       ========================================================================== */
+    generateBtn.addEventListener('click', triggerCompliment);
+    jokeBtn.addEventListener('click', triggerJoke);
+
+    // Keyboard Shortcuts: Space draws Compliment, 'J' draws Joke
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        triggerCompliment();
+      } else if (e.key.toLowerCase() === 'j') {
+        triggerJoke();
+      }
+    });
+
+    // Draw initial card on load
+    triggerCompliment();
+  </script>
+</body>
+</html>
