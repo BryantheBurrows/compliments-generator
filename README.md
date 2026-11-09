@@ -1,93 +1,83 @@
-🔮 Mystic Tarot — Compliments & Jests
+# Mystic Tarot — Compliments & Jests
 
-> A modern, mystical tarot deck application delivering daily affirmations, witty family-friendly humor, and tactile 3D interactions.
+**A tarot-style deck that deals kind compliments and family-friendly jokes, with tactile 3D card draws.**
 
-✨ Overview
+Affirmation generators are usually just a line of text in a box. Mystic Tarot is my take on that idea: each draw is a small ritual. A card lifts off a layered deck, flips with a reader's flourish and lands face-up, with synthesized card sounds and a celestial astrolabe turning in the background.
 
-Mystic Tarot reimagines traditional affirmation and humor generators through the lens of modern sacred geometry and tarot mysticism. Designed with classic tarot proportions (70mm × 120mm ratio), the app features realistic layered card physics, fluid 3D card flips, procedural sound synthesis, and a rich celestial aesthetic.
+### ▶ [Draw a card](https://bryantheburrows.github.io/compliments-generator/)
 
-🌟 Features
+![Mystic Tarot: a gold-framed tarot card titled "The Master of Grace" with a compliment, and buttons to draw a compliment or a joke](docs/screenshot.jpg)
 
-🎴 Authentic Tarot Experience
+Designed and built by **Bryan Burrows** with AI coding assistants. It's part of my AI product and UX design portfolio.
 
-⚬ Layered 3D Card Stack: A realistic deck stack with paper-edge bevels, rotational offsets, and tactile recoil on draw.
+---
 
-⚬ Card-Reader Draw Animation: The card lifts off the deck, rotates along its vertical axis ($180^\circ$), and lands face-up with a smooth settling motion.
+## Features
 
-⚬ Synthesized Audio: Generates realistic linen card slides, snaps, and celestial chimes using the native Web Audio API (zero external MP3 files required). Includes an audio mute/unmute toggle.
+**The deck**
+- A layered 3D card stack in classic tarot proportions, with paper-edge bevels and a recoil when a card is drawn
+- A reader's-flip draw animation: the card lifts, turns over and settles face-up
+- Card sounds (linen slides, snaps and chimes) synthesized live with the Web Audio API, with no audio files. Sound can be muted.
 
-📜 Curated Oracle Content
+**The content**
+- **100 compliments**, each with its own tarot-style title
+- **50 jokes** with a suspense beat before the punchline
+- **Write your own cards** and add them to your deck
 
-⚬ 100 Unique Compliments: Wholesome, thoughtful, and funny affirmations designed to brighten your day.
+**Handy extras**
+- Save favourite cards and browse them in a slide-up drawer
+- Copy any card to the clipboard to share it
+- Switch between the dark Midnight theme and the light Parchment theme
+- Works on desktop and mobile, with keyboard shortcuts
 
-⚬ 50 Family-Friendly Jests: Setup and punchline jokes featuring a delayed suspense animation (pulsing stars followed by a reveal).
+### Keyboard shortcuts
 
-⚬ Custom Arcana Inscription: Write and save your own personalized cards directly into your local deck.
+| Key | Action |
+|---|---|
+| <kbd>Space</kbd> | Draw a compliment |
+| <kbd>J</kbd> | Draw a joke |
 
-🛠️ Practical Utilities
+Favourites, custom cards and the theme are saved in your browser's `localStorage`. Nothing is sent to a server.
 
-⚬ Saved Deck (Favorites): Bookmark loved cards to localStorage and manage them via a slide-up modal.
+## How it was built
 
-⚬ One-Click Inscription Copy: Copy oracle cards to clipboard formatted for sharing.
+I led the concept, art direction and interaction design, and I built it with AI coding assistants. I directed the work in small, reviewable steps and checked each change in the browser.
 
-⚬ Themes & Astrolabe Visuals: Seamless toggle between Midnight Obsidian and Parchment Gold themes, framed against an animated celestial astrolabe.
+The design brief I set:
 
-⚬ Responsive & Accessible: Fully operable across desktop and mobile devices, complete with keyboard controls.
+- **Make it feel physical.** The deck has depth, weight and sound, so drawing a card feels like a small moment rather than a page refresh.
+- **Pace the joke.** Joke cards pause on pulsing stars before the punchline, the way a person would tell it.
+- **Keep it light.** It's one HTML file with no frameworks, no build step and no audio or image downloads beyond the fonts.
 
-⌨️ Keyboard Shortcuts
+## Tech stack
 
-Key	Action
-<kbd>Space</kbd>	Draw a new Compliment card
-<kbd>J</kbd>	Draw a new Joke card
+- HTML, CSS and vanilla JavaScript in a single `index.html`, with no framework or build step
+- CSS 3D transforms, custom properties for theming, and keyframe animations
+- Web Audio API for procedural sound effects
+- Canvas for sparkle particles and inline SVG for the astrolabe and icons
+- Fonts: Cinzel Decorative, Cinzel, Cormorant Garamond and Outfit from Google Fonts
 
-🚀 Getting Started
+## Run it locally
 
-Because this project is built entirely with vanilla web technologies, there are no build steps, packages, or external frameworks to install.
+There's nothing to install.
 
-Running Locally
+```bash
+git clone https://github.com/BryantheBurrows/compliments-generator.git
+cd compliments-generator
+open index.html
+```
 
-1. Clone the repository:
+On Windows or Linux, open `index.html` in any modern browser instead of using `open`. The live site is served by GitHub Pages from the `main` branch.
 
-[bash]
-git clone https://github.com/YOUR-USERNAME/YOUR-REPO-NAME.git
-cd YOUR-REPO-NAME
+## Project structure
 
+```
+compliments-generator/
+├── index.html           The whole app: markup, styles and scripts
+├── favicon.svg          Browser tab icon
+└── docs/screenshot.jpg  Screenshot used in this README
+```
 
-2. Open the application:
+## License
 
-	⚬ Double-click index.html to open it directly in any modern browser, or
-
-	⚬ Use the VS Code extension Live Server (Right-click index.html → Open with Live Server).
-
-🌐 Deploy to GitHub Pages
-
-Host your own live deck for free in under two minutes:
-
-1. Push your repository to GitHub.
-
-2. In your GitHub repository, navigate to Settings > Pages (under "Code and automation").
-
-3. Under Branch, select main (or master) and keep the folder set to / (root).
-
-4. Click Save.
-
-5. Your project will be live at:
-
-https://<your-username>.github.io/<repository-name>/
-
-
-🛠️ Built With
-
-⚬ HTML5 & Modern Semantics
-
-⚬ Modern CSS3: 3D Transforms (transform-style: preserve-3d, perspective), CSS Custom Properties (Theme tokens), Keyframe animations.
-
-⚬ Vanilla JavaScript (ES6+): Procedural particle generation, state management via localStorage.
-
-⚬ Web Audio API: Real-time synthesis of card-flip noise bursts, triangle oscillator snaps, and sine-wave chimes.
-
-⚬ Inline SVGs: Lightweight, sharp vector icons and custom favicon designed for fast rendering.
-
-📄 License
-
-This project is open-source and available under the MIT License.
+[MIT](LICENSE) © Bryan Burrows

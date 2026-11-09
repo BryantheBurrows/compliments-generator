@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mystic Tarot — Compliments & Jests</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
   <!-- Google Fonts: Cinzel Decorative, Cinzel (Tarot Titles), and Cormorant Garamond / Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -39,88 +40,10 @@
     }
 
     [data-theme="light"] {
-      --bg-gradient: radial-gradient(circle at 50% 18%, #f8f4ec 0%, #ede3d1 50%, #dcd0bc 100%);
-      --bg-stars: rgba(0, 0, 0, 0.04);
-      --card-bg: linear-gradient(145deg, #ffffff 0%, #faf6ee 100%);
-      --card-back-bg: radial-gradient(circle at 50% 50%, #2a2040 0%, #161026 80%, #0a0714 100%);
-      --card-border-outer: #b38927;
-      --card-border-inner: #926f1c;
-      --card-inner-bg: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(255, 255, 255, 0.8) 100%);
-      --gold-primary: #855e08;
-      --gold-deep: #b38927;
-      --gold-glow: rgba(179, 137, 39, 0.25);
-      --purple-accent: #7e22ce;
-      --purple-glow: rgba(126, 34, 206, 0.25);
-      --text-main: #241d13;
-      --text-muted: #6b6357;
-      --text-gold: #996e10;
-      --deck-edge: #ded6c5;
-      --deck-border: #a0823c;
-      --modal-bg: rgba(250, 246, 238, 0.96);
-      --shadow-deck: 0 24px 50px -8px rgba(90, 60, 10, 0.28), 0 12px 25px rgba(0, 0, 0, 0.12);
-      --btn-grad-compliment: linear-gradient(135deg, #dfb44a 0%, #b88a20 100%);
-      --btn-grad-joke: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);
-    }
-
-    /* ==========================================================================
-       Reset & Atmospheric Background
-       ========================================================================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      background: var(--bg-gradient);
-      color: var(--text-main);
-      font-family: 'Outfit', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow-x: hidden;
-      padding: 1.5rem 1rem;
-      transition: background 0.6s ease, color 0.4s ease;
-    }
-
-    /* Canvas for Sparkles */
-    #sparkle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 50;
-    }
-
-    /* ==========================================================================
-       Celestial Sacred Geometry Background Elements
-       ========================================================================== */
-    .celestial-backdrop {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: min(920px, 95vw);
-      height: min(920px, 95vw);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.38;
-      transition: opacity 0.5s ease;
-    }
-
-    [data-theme="light"] .celestial-backdrop {
-      opacity: 0.22;
-    }
-
-    [data-theme="light"] {
       --bg-gradient: radial-gradient(circle at 50% 20%, #fdfbf7 0%, #f3eee3 55%, #e6ddce 100%);
       --bg-stars: rgba(0, 0, 0, 0.04);
       --card-bg: linear-gradient(145deg, #ffffff 0%, #faf6ee 100%);
+      --card-back-bg: radial-gradient(circle at 50% 50%, #2a2040 0%, #161026 80%, #0a0714 100%);
       --card-border-outer: #b38927;
       --card-border-inner: #926f1c;
       --card-inner-bg: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.12) 0%, rgba(255, 255, 255, 0.8) 100%);
